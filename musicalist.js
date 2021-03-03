@@ -4,7 +4,10 @@ $(document).ready(function () {
     var login = $("#login")
     var register = $("#register")
 
+    $("#mainpage").hide()
     login.hide()
+    $(".deco").hide()
+    $(".photoprofil").hide()
 
     if (!localStorage.getItem("Utilisateurs")) {
         lesutilisateurs = {"users": []}
@@ -66,7 +69,7 @@ $(document).ready(function () {
                 break
             }
             if (!newmdp.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/)) {
-                alert("Veuillez saisir un Mot de Passe comportant 6 charactères minimums, au moins 1 chiffre et au moins 1 caractère spécial &#{([-_@)]=+}")
+                alert("Veuillez saisir un Mot de Passe comportant 6 caractères minimums, 1 chiffre, 1 caractère spécial &#{([-_@)]=+}, une patte de poulet et le sang d'une vierge.")
                 break
             }
         }
@@ -115,7 +118,9 @@ $(document).ready(function () {
                     userexist = true
                     alert("Connexion réussis")
                     login.hide()
-                    wall.show()
+                    $("#mainpage").show()
+                    $(".deco").show()
+                    $(".photoprofil").show()
                     break;
                 }
             }
@@ -138,6 +143,12 @@ $(document).ready(function () {
             alert("Connexion Impossible")
         }
 
+    })
+
+    $(".deco").click(function (event) {
+        event.preventDefault()
+        $("#mainpage").hide()
+        $("#login").show()
     })
 
 

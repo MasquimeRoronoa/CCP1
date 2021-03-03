@@ -21,3 +21,43 @@
 .cotitle {
     font-family: Constantia;
 }
+
+.photoprofil {
+    float: left;
+}
+
+.deco {
+    float: right;
+}
+
+.navbar {
+    width: 100%;
+}
+
+a {
+    margin-right: 4%;
+    margin-left: 4%;
+    font-size: 20px;
+    color: white;
+}
+
+.theme {
+    margin-right: 0;
+}
+
+.footer {
+    text-align: center;
+}
+
+.titlesong {
+    text-align: center;
+    margin-top: -2%;
+}
+
+.favplay {
+    margin-right: 3%;
+}
+
+.like {
+    margin-right: 0.5%;
+}
