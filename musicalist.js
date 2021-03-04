@@ -4,10 +4,6 @@ $(document).ready(function () {
     var login = $("#login")
     var register = $("#register")
 
-    $("#mainpage").hide()
-    login.hide()
-    $(".deco").hide()
-    $(".photoprofil").hide()
 
     if (!localStorage.getItem("Utilisateurs")) {
         lesutilisateurs = {"users": []}
@@ -52,6 +48,7 @@ $(document).ready(function () {
         var userId = create_UUID()
         var pp = $("#profilpic").val()
         var regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/
+        var mdpregex = newmdp.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/)
 
         let x
         for (x in lesutilisateurs.users) {
@@ -72,8 +69,13 @@ $(document).ready(function () {
                 alert("Veuillez saisir un Mot de Passe comportant 6 caractères minimums, 1 chiffre, 1 caractère spécial &#{([-_@)]=+}, une patte de poulet et le sang d'une vierge.")
                 break
             }
+            if (newmdp.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/) == actualUser.mdp) {
+                alert("Veuillez saisir un Mot de Passe non utilisé.")
+                break
+            }
         }
-        if (emailexist == false && pseudoexist == false && newmdp == newmdp.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/) && pp != "") {
+
+        if (emailexist == false && pseudoexist == false && newmdp != (!mdpregex && actualUser.mdp) && pp != "") {
             alert("Inscription réussis")
             register.hide()
             login.show()
@@ -91,57 +93,53 @@ $(document).ready(function () {
             newmail = $("#newmail").val("")
             newpseudo: $("#newpseudo").val("")
             newmdp: $("#newmdp").val("")
+            pp = $("#profilpic").val("")
 
         }
-
     })
 
     $("#form1").submit(function (event) {
         event.preventDefault()
         var userexist = false
-        var actualUser = {
-            mail: $("#mail").val(),
-            pseudo: $("#mail").val(),
-            mdp: $("#mdp").val(),
-        }
+        let isConnected = false
         let x
         for (x in lesutilisateurs.users) {
             var mail = $("#mail").val()
             var mdp = $("#mdp").val()
-            let actualUser = lesutilisateurs.users[x]
+            let thisUser = lesutilisateurs.users[x]
             if (mail == "" || mdp == "") {
                 alert("Veuillez remplir les champs.")
                 break
             }
-            if ((actualUser.mail == mail || actualUser.pseudo == mail)) {
-                if (actualUser.mdp == mdp) {
+            if ((thisUser.mail == mail || thisUser.pseudo == mail)) {
+                if (thisUser.mdp == mdp) {
                     userexist = true
+                    let actualUser = lesutilisateurs.users[x]
+                    sessionStorage.setItem("actualUser", JSON.stringify(actualUser))
                     alert("Connexion réussis")
-                    login.hide()
+                    $("#login").hide()
                     $("#mainpage").show()
+                    $(".navbar").show()
+                    $(".footer").show()
                     $(".deco").show()
-                    $(".photoprofil").show()
+                    $(".photoprofil").attr("src", actualUser.pp).show()
                     break;
                 }
             }
-            if ((actualUser.mail != mail || actualUser.pseudo != mail)) {
-                if (actualUser.mdp == mdp) {
-               alert("Mail ou Pseudo incorrect")
+
+            if ((thisUser.mail || thisUser.pseudo) != mail && thisUser.mdp == mdp) {
+                alert("Mail ou Pseudo incorrect")
                 break
             }
-            }
-            if ((actualUser.mail == mail || actualUser.pseudo == mail)) {
-                if (actualUser.mdp != mdp) {
-                    userexist = true
-                    alert("Mot de Passe incorrect")
-                    break;
-                }
+            if ((thisUser.mail || thisUser.pseudo) == mail && thisUser.mdp != mdp) {
+                alert("Mot de Passe incorrect")
+                break
             }
         }
-        if (!userexist) {
-            //user not found
-            alert("Connexion Impossible")
-        }
+
+        $("#mail").val("")
+        $("#mdp").val("")
+
 
     })
 
@@ -149,7 +147,46 @@ $(document).ready(function () {
         event.preventDefault()
         $("#mainpage").hide()
         $("#login").show()
+        $(".deco").hide()
+        $(".photoprofil").hide()
+        sessionStorage.clear()
     })
 
+    if (!sessionStorage.getItem("actualUser")) {
+        $('#mainpage').hide()
+        $("#register").show()
+    } else {
+        let thisUser = JSON.parse(sessionStorage.getItem("actualUser"))
+        $('#mainpage').show()
+        $("#register").hide()
+        $(".deco").show()
+        $(".photoprofil").attr("src", thisUser.pp).show()
+        $(".navbar").show()
+        $(".footer").show()
+
+    }
+
+
+    var lesmusics;
+
+    $.get("https://raw.githubusercontent.com/MasquimeRoronoa/CCP1/master/jsonMusique.json", function(response){
+        lesmusics = JSON.parse(response);
+        var allSongs = lesmusics.songs;
+
+        allSongs.forEach(function (song) {
+            console.log(song)
+            console.log(song.artist)
+            $(".titlesong").text(song.name + " / " + song.artist)
+            $(".imgacc").attr("src", song.image)
+            $(".titleartist").text(song.name + " / " + song.artist)
+
+            $(".imgacc").click(function (event) {
+                event.preventDefault()
+                $(".lecture").attr("controls src", song.song)
+            })
+        })
+
+
+})
 
 })

@@ -12,10 +12,12 @@
 
 #login {
     text-align: center;
+    display: none;
 }
 
 #register {
     text-align: center;
+    display: none;
 }
 
 .cotitle {
@@ -24,14 +26,19 @@
 
 .photoprofil {
     float: left;
+    width: 150px;
+    height: 120px;
+    display: none;
 }
 
 .deco {
     float: right;
+    display: none;
 }
 
 .navbar {
     width: 100%;
+    display: none;
 }
 
 a {
@@ -47,6 +54,7 @@ a {
 
 .footer {
     text-align: center;
+    display: none;
 }
 
 .titlesong {
@@ -60,4 +68,12 @@ a {
 
 .like {
     margin-right: 0.5%;
+}
+
+#contain {
+    height: 65vh;
+}
+
+.imgacc {
+    width: 50%;
 }
