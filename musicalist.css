@@ -4,10 +4,10 @@
 }
 
 #maintitle {
+    margin-top: 0.5%;
     text-align: center;
     font-family: "title-font";
     font-size: 80px;
-    color: crimson;
 }
 
 #login {
@@ -73,7 +73,7 @@ a {
 }
 
 .imgacc {
-    width: 50%;
+    width: 25%;
     margin-left: 25%;
     margin-right: 25%;
 }
@@ -85,4 +85,12 @@ a {
 .imgfoot {
     width: 100px;
     height: 100px;
+}
+
+td {
+    text-align: center;
+}
+
+.audionone {
+    display: none;
 }

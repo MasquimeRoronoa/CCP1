@@ -173,20 +173,36 @@ $(document).ready(function () {
         lesmusics = JSON.parse(response);
         var allSongs = lesmusics.songs;
 
-        allSongs.forEach(function (song) {
-            console.log(song)
-            $(".imgacc").attr("src", song.image)
-            $(".titleartist").text(song.name + " / " + song.artist)
+        allSongs.forEach(function (music) {
+            console.log(music)
+            $('#myTable').children('tbody').append(`
+                    <tr>
+                        <td> 
+                        <div src="${music.song}" class="listen"> 
+                        <div src="${music.name} + ' / ' + ${music.artist}" class="name">
+                        <img src="${music.image}"  class="imgacc" > <br> ${music.name} 
+                        </div>
+                        </div>
+                        </td>
+                        
+                    </tr>
+                `)
+        })
 
             $(".imgacc").click(function (event) {
                 event.preventDefault()
-                $("audio").attr("src", song.song)
-                $(".titlesong").text(song.name + " / " + song.artist)
-                $(".imgfoot").attr("src", song.image)
+                $(".imgfoot").attr("src", $(this).attr('src'))
+                $(".titlesong").text($(this).music.name + " / " + $(this).music.artist)
+            })
+            $(".listen").click(function (event) {
+                event.preventDefault()
+                $(".lecture").attr("src", $(this).attr("src"))
+            })
+            $(".name").click(function (event) {
+                event.preventDefault()
+                $(".titlesong").attr("src", $(this).attr("src"))
             })
         })
 
-
-})
 
 })
