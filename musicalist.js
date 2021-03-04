@@ -179,7 +179,6 @@ $(document).ready(function () {
                     <tr>
                         <td> 
                         <div src="${music.song}" class="listen"> 
-                        <div src="${music.name} + ' / ' + ${music.artist}" class="name">
                         <img src="${music.image}"  class="imgacc" > <br> ${music.name} 
                         </div>
                         </div>
@@ -197,10 +196,6 @@ $(document).ready(function () {
             $(".listen").click(function (event) {
                 event.preventDefault()
                 $(".lecture").attr("src", $(this).attr("src"))
-            })
-            $(".name").click(function (event) {
-                event.preventDefault()
-                $(".titlesong").attr("src", $(this).attr("src"))
             })
         })
 
