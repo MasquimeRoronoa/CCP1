@@ -94,3 +94,8 @@ td {
 .audionone {
     display: none;
 }
+
+button {
+    border: none;
+    background-color: white;
+}
