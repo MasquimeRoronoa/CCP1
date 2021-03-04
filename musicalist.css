@@ -48,10 +48,6 @@ a {
     color: white;
 }
 
-.theme {
-    margin-right: 0;
-}
-
 .footer {
     text-align: center;
     display: none;
@@ -70,10 +66,23 @@ a {
     margin-right: 0.5%;
 }
 
-#contain {
-    height: 65vh;
+#accueil {
+    height: 58vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .imgacc {
     width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.titleartist {
+    text-align: center;
+}
+
+.imgfoot {
+    width: 100px;
+    height: 100px;
 }

@@ -175,14 +175,14 @@ $(document).ready(function () {
 
         allSongs.forEach(function (song) {
             console.log(song)
-            console.log(song.artist)
-            $(".titlesong").text(song.name + " / " + song.artist)
             $(".imgacc").attr("src", song.image)
             $(".titleartist").text(song.name + " / " + song.artist)
 
             $(".imgacc").click(function (event) {
                 event.preventDefault()
-                $(".lecture").attr("controls src", song.song)
+                $("audio").attr("src", song.song)
+                $(".titlesong").text(song.name + " / " + song.artist)
+                $(".imgfoot").attr("src", song.image)
             })
         })
 
