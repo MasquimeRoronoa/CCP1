@@ -50,6 +50,7 @@ $(document).ready(function () {
         var regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/
         var mdpregex = newmdp.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/)
 
+
         let x
         for (x in lesutilisateurs.users) {
             let newmail = $("#newmail").val()
@@ -72,6 +73,32 @@ $(document).ready(function () {
             if (newmdp.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/) == actualUser.mdp) {
                 alert("Veuillez saisir un Mot de Passe non utilisé.")
                 break
+            }
+        }
+        if(!localStorage.getItem("Utilisateurs") && newmdp != "" && newmail != "" && pp != ""){
+            if (newmdp != mdpregex){
+                alert("Veuillez saisir un Mot de Passe comportant 6 caractères minimums, 1 chiffre, 1 caractère spécial &#{([-_@)]=+}, une patte de poulet et le sang d'une vierge.")
+            }
+            else
+            {
+                alert("Inscription réussis")
+                register.hide()
+                login.show()
+
+                var info = {
+                    id: userId,
+                    mail: $("#newmail").val(),
+                    pseudo: $("#newpseudo").val(),
+                    mdp: $("#newmdp").val(),
+                    pp: $("#profilpic").val()
+                }
+                lesutilisateurs.users.push(info)
+                saveJSON()
+
+                newmail = $("#newmail").val("")
+                newpseudo: $("#newpseudo").val("")
+                newmdp: $("#newmdp").val("")
+                pp = $("#profilpic").val("")
             }
         }
 
