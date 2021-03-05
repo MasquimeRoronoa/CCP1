@@ -75,7 +75,7 @@ $(document).ready(function () {
                 break
             }
         }
-        if(!localStorage.getItem("Utilisateurs") && newmdp != "" && newmail != "" && pp != ""){
+        if((!localStorage.getItem("Utilisateurs") && newmdp != "" && newmail != "" && pp != "") || emailexist == false && pseudoexist == false && newmdp != (!mdpregex && actualUser.mdp) && pp != "" ){
             if (newmdp != mdpregex){
                 alert("Veuillez saisir un Mot de Passe comportant 6 caractères minimums, 1 chiffre, 1 caractère spécial &#{([-_@)]=+}, une patte de poulet et le sang d'une vierge.")
             }
@@ -102,27 +102,6 @@ $(document).ready(function () {
             }
         }
 
-        if (emailexist == false && pseudoexist == false && newmdp != (!mdpregex && actualUser.mdp) && pp != "") {
-            alert("Inscription réussis")
-            register.hide()
-            login.show()
-
-            var info = {
-                id: userId,
-                mail: $("#newmail").val(),
-                pseudo: $("#newpseudo").val(),
-                mdp: $("#newmdp").val(),
-                pp: $("#profilpic").val()
-            }
-            lesutilisateurs.users.push(info)
-            saveJSON()
-
-            newmail = $("#newmail").val("")
-            newpseudo: $("#newpseudo").val("")
-            newmdp: $("#newmdp").val("")
-            pp = $("#profilpic").val("")
-
-        }
     })
 
     $("#form1").submit(function (event) {
@@ -200,30 +179,36 @@ $(document).ready(function () {
         lesmusics = JSON.parse(response);
         var allSongs = lesmusics.songs;
 
-        allSongs.forEach(function (music) {
-            console.log(music)
+            allSongs.forEach(function (music) {
+                var titre = music.name
+                console.log(music)
             $('#myTable').children('tbody').append(`
                     <tr>
                         <td> 
+                        <div class="changetitle">
                         <div src="${music.song}" class="listen"> 
-                        <img src="${music.image}"  class="imgacc" > <br> ${music.name} 
+                        <img src="${music.image}"  class="imgacc" > <br> <p>${music.name} </p>
                         </div>
                         </div>
                         </td>
                         
                     </tr>
                 `)
+                $(".listen").click(function (event) {
+                    event.preventDefault()
+                    $(".titlesong").innerHTML = "coucou";
+                })
         })
 
             $(".imgacc").click(function (event) {
                 event.preventDefault()
                 $(".imgfoot").attr("src", $(this).attr('src'))
-                $(".titlesong").text($(this).music.name + " / " + $(this).music.artist)
             })
             $(".listen").click(function (event) {
                 event.preventDefault()
                 $(".lecture").attr("src", $(this).attr("src"))
             })
+
         })
 
 
