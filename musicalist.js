@@ -38,10 +38,6 @@ $(document).ready(function () {
     $("#form2").submit(function (event) {
         event.preventDefault()
 
-        if (newmail == "" || newpseudo == "" || newmdp == "" || pp == "") {
-            alert("Veuillez remplir les champs")
-        }
-
         var emailexist = false
         var pseudoexist = false
         var newmdp = $("#newmdp").val()
@@ -49,7 +45,6 @@ $(document).ready(function () {
         var pp = $("#profilpic").val()
         var regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/
         var mdpregex = newmdp.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/)
-
 
         let x
         for (x in lesutilisateurs.users) {
@@ -75,7 +70,7 @@ $(document).ready(function () {
                 break
             }
         }
-        if((!localStorage.getItem("Utilisateurs") && newmdp != "" && newmail != "" && pp != "") || emailexist == false && pseudoexist == false && newmdp != (!mdpregex && actualUser.mdp) && pp != "" ){
+        if((!localStorage.getItem("Utilisateurs") && newmdp != "" && newmail != "" && pp != "") || (emailexist == false && pseudoexist == false && newmdp != (!mdpregex && actualUser.mdp) && pp != "") ){
             if (newmdp != mdpregex){
                 alert("Veuillez saisir un Mot de Passe comportant 6 caractères minimums, 1 chiffre, 1 caractère spécial &#{([-_@)]=+}, une patte de poulet et le sang d'une vierge.")
             }
@@ -101,6 +96,9 @@ $(document).ready(function () {
                 pp = $("#profilpic").val("")
             }
         }
+        if (newmail != "" || newpseudo != "" || newmdp != "" || pp != "") {
+            alert("Veuillez remplir les champs")
+        }
 
     })
 
@@ -115,6 +113,18 @@ $(document).ready(function () {
             let thisUser = lesutilisateurs.users[x]
             if (mail == "" || mdp == "") {
                 alert("Veuillez remplir les champs.")
+                break
+            }
+            if ((thisUser.mail || thisUser.pseudo) != mail && thisUser.mdp == mdp) {
+                alert("Mail ou Pseudo incorrect")
+                break
+            }
+            if ((thisUser.mail || thisUser.pseudo) == mail && thisUser.mdp != mdp) {
+                alert("Mot de Passe incorrect")
+                break
+            }
+            if ((thisUser.mail || thisUser.pseudo) != mail && thisUser.mdp != mdp) {
+                alert("Veuillez vous créer un compte.")
                 break
             }
             if ((thisUser.mail == mail || thisUser.pseudo == mail)) {
@@ -133,14 +143,7 @@ $(document).ready(function () {
                 }
             }
 
-            if ((thisUser.mail || thisUser.pseudo) != mail && thisUser.mdp == mdp) {
-                alert("Mail ou Pseudo incorrect")
-                break
-            }
-            if ((thisUser.mail || thisUser.pseudo) == mail && thisUser.mdp != mdp) {
-                alert("Mot de Passe incorrect")
-                break
-            }
+
         }
 
         $("#mail").val("")
@@ -179,24 +182,32 @@ $(document).ready(function () {
         lesmusics = JSON.parse(response);
         var allSongs = lesmusics.songs;
 
-            allSongs.forEach(function (music) {
+        allSongs.forEach(function (music) {
                 var titre = music.name
                 console.log(music)
+                console.log(music.song)
+
             $('#myTable').children('tbody').append(`
                     <tr>
                         <td> 
-                        <div class="changetitle">
+                        <div class="changetitle" src="${music.name} / ${music.artist} ">
                         <div src="${music.song}" class="listen"> 
-                        <img src="${music.image}"  class="imgacc" > <br> <p>${music.name} </p>
+                        <img src="${music.image}"  class="imgacc" > <br> <p>${music.name} / ${music.artist} </p>
                         </div>
                         </div>
                         </td>
                         
                     </tr>
                 `)
-                $(".listen").click(function (event) {
+                $(".changetitle").click(function (event) {
                     event.preventDefault()
-                    $(".titlesong").innerHTML = "coucou";
+                    $(".titlesong").text($(this).attr('src'))
+                })
+                $(".nextbtn").click(function (event) {
+                    event.preventDefault()
+                        $(".lecture").attr("src", music.song.length[i]+1)
+
+
                 })
         })
 
