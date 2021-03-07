@@ -85,7 +85,9 @@ $(document).ready(function () {
                     mail: $("#newmail").val(),
                     pseudo: $("#newpseudo").val(),
                     mdp: $("#newmdp").val(),
-                    pp: $("#profilpic").val()
+                    pp: $("#profilpic").val(),
+                    fav : [],
+                    playlist : []
                 }
                 lesutilisateurs.users.push(info)
                 saveJSON()
@@ -115,18 +117,6 @@ $(document).ready(function () {
                 alert("Veuillez remplir les champs.")
                 break
             }
-            if ((thisUser.mail || thisUser.pseudo) != mail && thisUser.mdp == mdp) {
-                alert("Mail ou Pseudo incorrect")
-                break
-            }
-            if ((thisUser.mail || thisUser.pseudo) == mail && thisUser.mdp != mdp) {
-                alert("Mot de Passe incorrect")
-                break
-            }
-            if ((thisUser.mail || thisUser.pseudo) != mail && thisUser.mdp != mdp) {
-                alert("Veuillez vous créer un compte.")
-                break
-            }
             if ((thisUser.mail == mail || thisUser.pseudo == mail)) {
                 if (thisUser.mdp == mdp) {
                     userexist = true
@@ -141,8 +131,11 @@ $(document).ready(function () {
                     $(".photoprofil").attr("src", actualUser.pp).show()
                     break;
                 }
+                else if ((thisUser.mail == mail || thisUser.pseudo == mail) && thisUser.mdp != mdp){
+                    alert("Mot de Passe incorrect")
+                    break
+                }
             }
-
 
         }
 
@@ -185,7 +178,7 @@ $(document).ready(function () {
         allSongs.forEach(function (music) {
                 var titre = music.name
                 console.log(music)
-                console.log(music.song)
+                console.log(allSongs)
 
             $('#myTable').children('tbody').append(`
                     <tr>
@@ -205,7 +198,12 @@ $(document).ready(function () {
                 })
                 $(".nextbtn").click(function (event) {
                     event.preventDefault()
-                        $(".lecture").attr("src", music.song.length[i]+1)
+
+                    let i
+                    for (i in allSongs) {
+                        if (allSongs.song == $(".lecture").attr("src"))
+                        $(".lecture").attr("src", (allSongs.song.length) + 1)
+                    }
 
 
                 })
