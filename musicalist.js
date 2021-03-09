@@ -4,6 +4,8 @@ $(document).ready(function () {
     var login = $("#login")
     var register = $("#register")
 
+    $("#listfavoris").hide()
+
 
     if (!localStorage.getItem("Utilisateurs")) {
         lesutilisateurs = {"users": []}
@@ -13,6 +15,10 @@ $(document).ready(function () {
 
     function saveJSON() {
         localStorage.setItem("Utilisateurs", JSON.stringify(lesutilisateurs))
+    }
+
+    function saveJSON2() {
+        localStorage.setItem("MesFavoris", JSON.stringify(lesfavoris))
     }
 
     function create_UUID() {
@@ -51,6 +57,7 @@ $(document).ready(function () {
             let newmail = $("#newmail").val()
             let newpseudo = $("#newpseudo").val()
             let actualUser = lesutilisateurs.users[x]
+
             if (actualUser.mail == newmail) {
                 alert("Email déjà utilisé")
                 emailexist = true
@@ -87,7 +94,6 @@ $(document).ready(function () {
                     mdp: $("#newmdp").val(),
                     pp: $("#profilpic").val(),
                     fav : [],
-                    playlist : []
                 }
                 lesutilisateurs.users.push(info)
                 saveJSON()
@@ -175,9 +181,11 @@ $(document).ready(function () {
         lesmusics = JSON.parse(response);
         var allSongs = lesmusics.songs;
 
-        allSongs.forEach(function (music) {
+
+
+        allSongs.forEach(function (music, index) {
                 var titre = music.name
-                console.log(music)
+                console.log(music, index)
                 console.log(allSongs)
 
             $('#myTable').children('tbody').append(`
@@ -196,17 +204,7 @@ $(document).ready(function () {
                     event.preventDefault()
                     $(".titlesong").text($(this).attr('src'))
                 })
-                $(".nextbtn").click(function (event) {
-                    event.preventDefault()
 
-                    let i
-                    for (i in allSongs) {
-                        if (allSongs.song == $(".lecture").attr("src"))
-                        $(".lecture").attr("src", (allSongs.song.length) + 1)
-                    }
-
-
-                })
         })
 
             $(".imgacc").click(function (event) {
@@ -217,8 +215,102 @@ $(document).ready(function () {
                 event.preventDefault()
                 $(".lecture").attr("src", $(this).attr("src"))
             })
+        $(".nextbtn").click(function (event) {
+            event.preventDefault()
+            let x
+            for (x = 0; x < 39; x++) {
+
+                var thissong = allSongs[0].song
+                var source = $(".lecture").attr("src")
+                    console.log(source)
+                console.log(thissong)
+                if (source == thissong) {
+                    $(".lecture").attr("src", allSongs[x].song)
+                    $(".imgfoot").attr("src", allSongs[x].image)
+                    $(".titlesong").text(allSongs[x].name +" / "+ allSongs[x].artist)
+                }
+            }
+
 
         })
+
+
+        $(".like").click(function (event) {
+            event.preventDefault()
+            if (!localStorage.getItem("MesFavoris")) {
+                lesfavoris = {"favoris": []}
+            } else {
+                lesfavoris = JSON.parse(localStorage.getItem("MesFavoris"))
+            }
+
+
+            let x
+            for (x in lesutilisateurs.users) {
+                let actualUser = lesutilisateurs.users[x]
+                var myFav = {
+                    id : JSON.parse(sessionStorage.getItem("actualUser")).id,
+                    title : $(".titlesong").text(),
+                    img : $(".imgfoot").attr("src"),
+                    song : $(".lecture").attr("src"),
+                }
+                if (actualUser.id == myFav.id && $(".titlesong").text() == myFav.name ){
+                    alert("Cette musique est déjà en favoris")
+                    break
+                }
+                else {
+                    lesfavoris.favoris.push(myFav)
+                    saveJSON2()
+                }
+            }
+        })
+
+        $(".favoris").click(function (event) {
+            event.preventDefault()
+
+            if (!localStorage.getItem("MesFavoris")) {
+                lesfavoris = {"favoris": []}
+            } else {
+                lesfavoris = JSON.parse(localStorage.getItem("MesFavoris"))
+            }
+                $("#accueil").hide()
+                $("#listfavoris").show()
+
+            var allfav = JSON.parse(localStorage.getItem("MesFavoris"))
+            var listfav = allfav.favoris
+
+            listfav.forEach(function (lesfavs) {
+
+                console.log(lesfavs.id)
+                if ($(".changetitle").val() != lesfavs.title && $(".listen").val() != lesfavs.song) {
+                    $('#favTable').children('tbody').append(`
+                    <tr>
+                        <td> 
+                        <div class="changetitle" src="${lesfavs.title}">
+                        <div src="${lesfavs.song}" class="listen"> 
+                        <img src="${lesfavs.img}"  class="imgacc"> <br> <p>${lesfavs.title}</p>
+                        </div>
+                        </div>
+                        </td>  
+                    </tr>
+                `)
+                }
+
+                $(".changetitle").click(function (event) {
+                    event.preventDefault()
+                    $(".titlesong").text($(this).attr('src'))
+                })
+                $(".imgacc").click(function (event) {
+                    event.preventDefault()
+                    $(".imgfoot").attr("src", $(this).attr('src'))
+                })
+                $(".listen").click(function (event) {
+                    event.preventDefault()
+                    $(".lecture").attr("src", $(this).attr("src"))
+                })
+            })
+        })
+
+    })
 
 
 })
