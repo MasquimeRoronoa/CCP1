@@ -182,57 +182,87 @@ $(document).ready(function () {
         var allSongs = lesmusics.songs;
 
 
-
-        allSongs.forEach(function (music, index) {
-                var titre = music.name
-                console.log(music, index)
-                console.log(allSongs)
+        var test =-1;
+        allSongs.forEach(function (music) {
+                console.log(music)
+                test++;
 
             $('#myTable').children('tbody').append(`
                     <tr>
                         <td> 
                         <div class="changetitle" src="${music.name} / ${music.artist} ">
                         <div src="${music.song}" class="listen"> 
-                        <img src="${music.image}"  class="imgacc" > <br> <p>${music.name} / ${music.artist} </p>
+                        <img id="${test}" src="${music.image}"  class="imgacc" > <br> <p>${music.name} / ${music.artist} </p>
                         </div>
                         </div>
                         </td>
                         
                     </tr>
                 `)
-                $(".changetitle").click(function (event) {
-                    event.preventDefault()
-                    $(".titlesong").text($(this).attr('src'))
-                })
+
 
         })
+        $(".changetitle").click(function (event) {
+            event.preventDefault()
+            $(".titlesong").text($(this).attr('src'))
 
+        })
             $(".imgacc").click(function (event) {
                 event.preventDefault()
                 $(".imgfoot").attr("src", $(this).attr('src'))
+                $("#index").attr("data",$(this).attr('id'))
             })
             $(".listen").click(function (event) {
                 event.preventDefault()
                 $(".lecture").attr("src", $(this).attr("src"))
             })
-        $(".nextbtn").click(function (event) {
-            event.preventDefault()
-            let x
-            for (x = 0; x < 39; x++) {
 
-                var thissong = allSongs[0].song
-                var source = $(".lecture").attr("src")
-                    console.log(source)
-                console.log(thissong)
-                if (source == thissong) {
+
+
+                $(".nextbtn").click(function (event) {
+                event.preventDefault()
+                var indexChansonlance = $("#index").attr('data');
+                var x = parseInt(indexChansonlance) +1;
+                if (x < 39) {
                     $(".lecture").attr("src", allSongs[x].song)
                     $(".imgfoot").attr("src", allSongs[x].image)
-                    $(".titlesong").text(allSongs[x].name +" / "+ allSongs[x].artist)
+                    $(".titlesong").text(allSongs[x].name + " / " + allSongs[x].artist)
+
+                    $("#index").attr('data', x)
                 }
+                else {
+                    var indexChansonlance = $("#index").attr('data');
+                    var x = parseInt(indexChansonlance) - 39;
+
+                    $(".lecture").attr("src", allSongs[x].song)
+                    $(".imgfoot").attr("src", allSongs[x].image)
+                    $(".titlesong").text(allSongs[x].name + " / " + allSongs[x].artist)
+
+                    $("#index").attr('data', x)
+                }
+                })
+
+
+        $(".prevbtn").click(function (event) {
+            event.preventDefault()
+            var indexChansonlance = $("#index").attr('data');
+            var x = parseInt(indexChansonlance) -1;
+
+            if (x < 39) {
+                $(".lecture").attr("src", allSongs[x].song)
+                $(".imgfoot").attr("src", allSongs[x].image)
+                $(".titlesong").text(allSongs[x].name + " / " + allSongs[x].artist)
+
+                $("#index").attr('data', x)
             }
-
-
         })
+
+
+
+
+
+
+
 
 
         $(".like").click(function (event) {
