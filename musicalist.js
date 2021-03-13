@@ -21,6 +21,8 @@ $(document).ready(function () {
         localStorage.setItem("MesFavoris", JSON.stringify(lesfavoris))
     }
 
+    /* Création de l'id unique utilisateur */
+
     function create_UUID() {
         var dt = new Date().getTime();
         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -31,6 +33,8 @@ $(document).ready(function () {
         return uuid;
     }
 
+    /* Changement de fenetre au clic sur première inscription ou sur connexion */
+
     $("#dejacompte").click(function () {
         register.hide()
         login.show()
@@ -40,6 +44,8 @@ $(document).ready(function () {
         login.hide()
         register.show()
     })
+
+    /* Formulaire d'inscription avec Regex sur MdP */
 
     $("#form2").submit(function (event) {
         event.preventDefault()
@@ -110,6 +116,8 @@ $(document).ready(function () {
 
     })
 
+    /* Formulaire de connexion */
+
     $("#form1").submit(function (event) {
         event.preventDefault()
         var userexist = false
@@ -151,6 +159,8 @@ $(document).ready(function () {
 
     })
 
+    /* Création du bouton déconnexion et envoie dans le session storage pour rester connecter après un refresh */
+
     $(".deco").click(function (event) {
         event.preventDefault()
         $("#mainpage").hide()
@@ -174,6 +184,7 @@ $(document).ready(function () {
 
     }
 
+    /* Appel de l'API et affichage du contenue dans la page d'accueil */
 
     var lesmusics;
 
@@ -184,7 +195,7 @@ $(document).ready(function () {
 
         var test =-1;
         allSongs.forEach(function (music) {
-                console.log(music)
+                console.log(music.name)
                 test++;
 
             $('#myTable').children('tbody').append(`
@@ -199,25 +210,36 @@ $(document).ready(function () {
                         
                     </tr>
                 `)
-
-
         })
+
+        /* Modification du titre de la chanson dans le footer au moment du clic*/
+
+
         $(".changetitle").click(function (event) {
             event.preventDefault()
             $(".titlesong").text($(this).attr('src'))
+            $(".titlesong").attr("src", $(this).attr('src'))
+            var titreMusic = $(".titlesong").attr("src")
+            console.log(titreMusic)
 
         })
+
+        /* Modification de l'image de la chanson dans le footer au moment du clic */
+
             $(".imgacc").click(function (event) {
                 event.preventDefault()
                 $(".imgfoot").attr("src", $(this).attr('src'))
                 $("#index").attr("data",$(this).attr('id'))
             })
+
+        /* Modification de la source de la chanson dans le lecteur du footer au moment du clic */
+
             $(".listen").click(function (event) {
                 event.preventDefault()
                 $(".lecture").attr("src", $(this).attr("src"))
             })
 
-
+/* Bouton suivant et précédent */
 
                 $(".nextbtn").click(function (event) {
                 event.preventDefault()
@@ -258,12 +280,16 @@ $(document).ready(function () {
         })
 
 
+        let searchstr = $(".recherche").val("")
+        for (searchstr in allSongs.name){
+            console.log(searchstr)
+            if (music.name.contains(searchstr)){
+                $('#myTable').hide()
 
+            }
+        }
 
-
-
-
-
+/* Ajout du contenue en favoris */
 
         $(".like").click(function (event) {
             event.preventDefault()
@@ -273,26 +299,44 @@ $(document).ready(function () {
                 lesfavoris = JSON.parse(localStorage.getItem("MesFavoris"))
             }
 
+            var myFav = {
+                id : JSON.parse(sessionStorage.getItem("actualUser")).id,
+                title : $(".titlesong").text(),
+                img : $(".imgfoot").attr("src"),
+                song : $(".lecture").attr("src"),
+            }
+            var actualUser = JSON.parse(sessionStorage.getItem("actualUser")).id
+            var titreMusic = $(".titlesong").attr("src")
+
+                lesfavoris.favoris.push(myFav)
+                saveJSON2()
+
+
+        })
+
+/* Tentative de modification de l'icon de like si la chanson est dejà en favoris */
+
+        $(".imgacc").click(function (event) {
+            event.preventDefault()
+
+            if (!localStorage.getItem("MesFavoris")) {
+                lesfavoris = {"favoris": []}
+            } else {
+                lesfavoris = JSON.parse(localStorage.getItem("MesFavoris"))
+            }
 
             let x
-            for (x in lesutilisateurs.users) {
-                let actualUser = lesutilisateurs.users[x]
-                var myFav = {
-                    id : JSON.parse(sessionStorage.getItem("actualUser")).id,
-                    title : $(".titlesong").text(),
-                    img : $(".imgfoot").attr("src"),
-                    song : $(".lecture").attr("src"),
-                }
-                if (actualUser.id == myFav.id && $(".titlesong").text() == myFav.name ){
-                    alert("Cette musique est déjà en favoris")
-                    break
-                }
-                else {
-                    lesfavoris.favoris.push(myFav)
-                    saveJSON2()
+            for (x in lesfavoris.favoris[x]) {
+                var thisfav = lesfavoris.favoris[x]
+                var thissong = $(".titlesong").attr("src", $(this).attr('src'))
+                if (thisfav.title == thissong){
+                    $(".like").removeClass("far")
+                    $(".like").addClass("fas")
                 }
             }
         })
+
+/* Affichage des favoris */
 
         $(".favoris").click(function (event) {
             event.preventDefault()
@@ -306,41 +350,41 @@ $(document).ready(function () {
                 $("#listfavoris").show()
 
             var allfav = JSON.parse(localStorage.getItem("MesFavoris"))
-            var listfav = allfav.favoris
 
-            listfav.forEach(function (lesfavs) {
 
-                console.log(lesfavs.id)
-                if ($(".changetitle").val() != lesfavs.title && $(".listen").val() != lesfavs.song) {
-                    $('#favTable').children('tbody').append(`
+                let x
+                for (x in allfav.favoris)
+                    var tabfav = allfav.favoris[x]
+
+            {
+                        $('#favTable').children('tbody').append(`
                     <tr>
                         <td> 
-                        <div class="changetitle" src="${lesfavs.title}">
-                        <div src="${lesfavs.song}" class="listen"> 
-                        <img src="${lesfavs.img}"  class="imgacc"> <br> <p>${lesfavs.title}</p>
+                        <div class="changetitle" src="${tabfav.title}">
+                        <div src="${tabfav.song}" class="listen"> 
+                        <img src="${tabfav.img}"  class="imgacc"> <br> <p>${tabfav.title}</p>
                         </div>
                         </div>
                         </td>  
                     </tr>
                 `)
-                }
 
-                $(".changetitle").click(function (event) {
-                    event.preventDefault()
-                    $(".titlesong").text($(this).attr('src'))
-                })
-                $(".imgacc").click(function (event) {
-                    event.preventDefault()
-                    $(".imgfoot").attr("src", $(this).attr('src'))
-                })
-                $(".listen").click(function (event) {
-                    event.preventDefault()
-                    $(".lecture").attr("src", $(this).attr("src"))
-                })
-            })
+
+                    $(".changetitle").click(function (event) {
+                        event.preventDefault()
+                        $(".titlesong").text($(this).attr('src'))
+                    })
+                    $(".imgacc").click(function (event) {
+                        event.preventDefault()
+                        $(".imgfoot").attr("src", $(this).attr('src'))
+                    })
+                    $(".listen").click(function (event) {
+                        event.preventDefault()
+                        $(".lecture").attr("src", $(this).attr("src"))
+                    })
+                }
         })
 
     })
-
 
 })

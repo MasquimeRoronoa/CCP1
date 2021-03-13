@@ -98,12 +98,10 @@
                             <a class="nav-link" href="index.html">Accueil</a>
                             <a class="nav-link" href="#">Playlist</a>
                             <a class="nav-link favoris" href="#">Favoris</a>
-                            <a class="nav-link" href="#">Recherche</a>
                     </div>
                 </div>
                 <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Rechercher</button>
+                    <input class="form-control me-2 recherche" type="search" placeholder="Rechercher" aria-label="Search">
                 </form>
             </div>
         </nav>
@@ -140,6 +138,18 @@
 
     </div>
 
+    <div id="searchtab">
+
+        <div class="container">
+            <table class="table" id="mysearch">
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
 
     <div id="foooter">
 
@@ -153,11 +163,11 @@
 
         <button type="button" class="nextbtn"><i class="far fa-arrow-alt-circle-right fa-2x favplay "></i></button>
 
-        <button type="button"><i class="far fa-heart fa-2x like"></i></button>
+        <button type="button" class="like"><i class="far fa-heart fa-2x"></i></button>
 
         <button type="button"> <i class="far fa-list-alt fa-2x"></i></button>
 
-        <p class="titlesong"></p>
+        <p class="titlesong" src=""></p>
         <p id="index"></p>
     </div>
     </div>
