@@ -279,6 +279,7 @@ $(document).ready(function () {
             }
         })
 
+        /* Tentative de fonction recherche */
 
         let searchstr = $(".recherche").val("")
         for (searchstr in allSongs.name){
